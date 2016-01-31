@@ -1,21 +1,17 @@
 # OAuth GitHub authentication using ASP .NET
 
-In this tutorial we will learn how to build a very simple ASP .NET MVC application and enable GitHub authentication for it. 
+In this tutorial we will learn how to build a very simple ASP .NET MVC application and enable GitHub authentication for it. Afterwards we will create a git repository and deploy to GitHub.
 
-The software I used for this tutorial includes:
-- Windows 7 Ultimate 64-bit
-- Microsoft Visual Studio 2015
-- .NET Framework 4.5.2
-- Owin.Security.Providers 1.26.0
-- Google Chrome Version 48.0.2564.97 m
+To be more specific, this article explains the following:
+- [How to create a ASP .NET MVC application](#create-your-asp-net-mvc-application)
+- [How to register your application in GitHub for OAuth](#register-your-application-in-github)
+- [How to enable GitHub authentication in your ASP .NET app](#enable-github-authentication)
+- [How to test your app](#ready-steady-go)
+- [How to make your app a bit more pleasant for your users](#what-about-ux)
+- [How to create a new git repository for your project ad push to GitHub](#push-to-github)
+- [A list with the software I used for the project in cases something is off](#software-used)
 
-TOC
-- [Create your ASP .NET MVC application](#create-your-asp-net-mvc-application)
-- [Register your application in GitHub](#register-your-application-in-github)
-- [Enable GitHub authentication](#enable-github-authentication)
-- [Ready Steady Go](#ready-steady-go)
-- [What about UX?](#what-about-ux)
-- [Push to GitHub]()
+Let's get started!
 
 ___
 
@@ -531,5 +527,17 @@ Let’s go back to GitHub and see what changed to the repository we created earl
 We can see that all the files from our local directory, except for those listed in the .gitignore file, have been uploaded to GitHub.
 
 That's it! You can now easily share your project with anyone you want.
+
+___
+
+### Software used
+
+Here is the list of the software and versions I used for this tutorial:
+- Windows 7 Ultimate 64-bit
+- Microsoft Visual Studio 2015
+- .NET Framework 4.5.2
+- Owin.Security.Providers 1.26.0
+- Google Chrome Version 48.0.2564.97 m
+- git version 2.5.0.windows.1
 
 ___
