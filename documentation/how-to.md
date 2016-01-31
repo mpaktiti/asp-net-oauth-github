@@ -118,3 +118,74 @@ Make sure that the values you set are exactly the same, otherwise the authentica
 > _If later on you want to reset the Client Secret value at your GitHub application (because for example you published it on the web for a tutorial you were building, and it is no longer a secret), make sure that you update your ASP .NET web app as well, otherwise your authentication functionality will break._
 
 ___
+
+### Ready Steady Go
+
+So we created an application on GitHub and built an ASP .NET web app with enabled GitHub authentication. 
+Let’s see if everything works!
+
+Run your application by selecting the _Debug > Start Debugging_ menu item or pressing the F5 key in Visual Studio or clicking the browser button on your toolbar.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_test_app.png "Start Debugging")
+
+Your app will open in your browser, Google Chrome in my case.
+
+Select the _Log In_ menu at the top.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_test_app_02.png "Select Log in")
+
+At the _Use another service to log in_ section you see a _GitHub_ button.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_test_app_03.png "Use another service to log in > GitHub")
+
+Click the button. You are now redirected to the GitHub website. 
+
+If you are not logged in to your GitHub account you will be prompted to do so.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_test_app_04.png "Sign in to GitHub")
+
+Once you enter your credentials, or if you were already logged in GitHub, you will see the _Authorize application_ popup.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_test_app_05.png "Authorize application")
+
+GitHub prompts you to give the application permission to access your personal user data. 
+
+Click _Authorize application_.
+
+You are being redirected back to your application (check the URL). As a final step you need to supply your email address to complete the registration process. This is once-off and you will not see this page in the future.
+
+Type your email and click _Register_.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_test_app_06.png "Finish logging in")
+
+Congratulations, you are now logged into the application! :+1:
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_test_app_07.png "Successful login")
+
+Try to Log off and on again. You will see that you will be directly logged in, without being redirected to GitHub to give the application permission to access your personal user data. That is because your application now has an access token. 
+
+Log off from your app and let’s try something else.
+
+Let’s go back to your GitHub profile and select _Settings > Applications > Developer applications_ and click on your app (`oauth_asp_webapp` in my case). Notice that 1 user has registered with your app.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_test_app_08.png "Authenticated users")
+
+Click _Revoke all user tokens_.
+
+Confirm the action in the popup GitHub displays.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_test_app_09.png "Revoke all user tokens")
+
+Refresh the GitHub page. The users count now is back to zero.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_test_app_10.png "No authenticated users")
+
+Go back to your web app and click Log In. Click the GitHub button from the services available for login. 
+
+Once again you are redirected to GitHub to authorize your app. That is because you revoked the user token so your app’s access token is no longer valid.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_test_app_11.png "Authorize application")
+
+> ![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/paper-icon.jpg "Note") You can find more information on the OAuth flow [here](https://developer.github.com/v3/oauth/)
+
+___
