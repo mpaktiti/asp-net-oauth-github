@@ -12,7 +12,10 @@ The software I used for this tutorial includes:
 TOC
 - [Create your ASP .NET MVC application](#create-your-asp-net-mvc-application)
 - [Register your application in GitHub](#register-your-application-in-github)
-
+- [Enable GitHub authentication](#enable-github-authentication)
+- [Ready Steady Go](#ready-steady-go)
+- [What about UX?](#what-about-ux)
+- [Push to GitHub]()
 
 ___
 
@@ -343,4 +346,6 @@ If you click your new button you are authenticated via GitHub and the button is 
 If you click _Log off_ the button is again displayed.
 
 ___
+
+### Push to GitHub
 
