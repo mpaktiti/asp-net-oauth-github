@@ -3,11 +3,11 @@
 In this tutorial we will learn how to build a very simple ASP .NET MVC application and enable GitHub authentication for it. 
 
 The software I used for this tutorial includes:
-* Windows 7 Ultimate 64-bit
-* Microsoft Visual Studio 2015
-* .NET Framework 4.5.2
-* Owin.Security.Providers 1.26.0
-* Google Chrome Version 48.0.2564.97 m
+- Windows 7 Ultimate 64-bit
+- Microsoft Visual Studio 2015
+- .NET Framework 4.5.2
+- Owin.Security.Providers 1.26.0
+- Google Chrome Version 48.0.2564.97 m
 
 ___
 
@@ -189,3 +189,153 @@ Once again you are redirected to GitHub to authorize your app. That is because y
 > ![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/paper-icon.jpg "Note") You can find more information on the OAuth flow [here](https://developer.github.com/v3/oauth/)
 
 ___
+
+### What about UX?
+
+Well that was cute but what about user experience? I only want to use GitHub for logins, why do my users have to do so many clicks?
+
+OK let’s go back to Visual Studio to customize our app so the _Log in_ link at the top invokes GitHub authentication directly.
+
+Using Solution Explorer expand _Views > Shared_ and open the `_LoginPartial.cshtml` file.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_modify_ui.png "Open _LoginPartial.cshtml file")
+
+> ![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/paper-icon.jpg "Note") Hey wait, what are these cshtml files?
+> 
+> The extension cshtml is used by ASP .NET web pages with Razor syntax. Razor is a markup language that lets you embed server-based code (C# in our case) into web pages. For more information on this refer to [MSDN](http://www.asp.net/web-pages/overview/getting-started/introducing-razor-syntax-c), [w3schools](http://www.w3schools.com/aspnet/razor_syntax.asp) or simply [google it](https://www.google.com), there are many informative pages out there.
+
+The file checks if the user is authenticated.
+
+```cs
+@if (Request.IsAuthenticated)
+```
+If so a Welcome message is displayed and a log off option
+
+```html
+using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+{
+	@Html.AntiForgeryToken()
+	<ul class="nav navbar-nav navbar-right">
+		<li> @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+    </ul>
+}
+```
+
+If not two options are displayed: Log In, Register
+```html
+<ul class="nav navbar-nav navbar-right">
+	<li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
+	<li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+</ul>
+```
+
+What we want to do is modify the login option (hence the `else` part) so it directs the user to GitHub authentication.
+
+Remember, when you clicked on Log in there was a nice _GitHub_ button. 
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_modify_ui_02.png "GitHub button")
+
+Let’s display this button directly on the header.
+
+Using Solution Explorer expand _Views > Account_ and open the `_ExternalLoginsListPartial.cshtml` file.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_modify_ui_03.png "Open _ExternalLoginsListPartial.cshtml file")
+
+> ![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/paper-icon.jpg "Note") You can find more information about partial views [here](http://www.codeproject.com/Tips/617361/Partial-View-in-ASP-NET-MVC)
+
+This file renders the available login providers.
+
+It is formatted to display info at a section of the page but now we want to move this to the page header, a significantly smaller section. So we will make some changes to make things look better.
+
+Instead of modifying this file, let’s copy it and modify our copy.
+
+Using Solution Explorer, right click on the file and select _Copy_. 
+Then right click on its parent folder (`Account`) and select _Paste_. A copy of the file is now created. 
+
+Rename your copy to `_ExternalLoginsListPartialHeader.cshtml` and open it. We will make the following changes:
+- Delete the `<h4>` tag and text
+- Delete the horizontal line added by tag `<hr>`
+- Change the `if` text to: GitHub authentication is broken
+- Change the button’s caption to Login with `@p.AuthenticationType`
+
+Your code should look like this:
+
+```cs
+@model GithubOAuth.Models.ExternalLoginListViewModel
+@using Microsoft.Owin.Security
+
+@{
+    var loginProviders = Context.GetOwinContext().Authentication.GetExternalAuthenticationTypes();
+    if (loginProviders.Count() == 0) {
+        <div>
+            <p>
+                OAuth with GitHub is broken
+            </p>
+        </div>
+    }
+    else {
+        using (Html.BeginForm("ExternalLogin", "Account", new { ReturnUrl = Model.ReturnUrl })) {
+            @Html.AntiForgeryToken()
+            <div id="socialLoginList">
+                <p>
+                    @foreach (AuthenticationDescription p in loginProviders) {
+                        <button type="submit" class="btn btn-default" id="@p.AuthenticationType" name="provider" value="@p.AuthenticationType" title="Log in using your @p.Caption account">Login with @p.AuthenticationType</button>
+                    }
+                </p>
+            </div>
+        }
+    }
+}
+
+```
+
+Save and close the file. Let’s go back to `_LoginPartial.cshtml`
+
+Open the file and make the following changes:
+- Delete the `else` clause contents (`<ul>` and `<li>`)
+- Add your new partial view to the `else` clause
+
+Your code should look like this:
+
+```cs
+@using Microsoft.AspNet.Identity
+@using GithubOAuth.Models
+
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            </li>
+            <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        @Html.Partial("~/Views/Account/_ExternalLoginsListPartialHeader.cshtml", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
+    </ul>
+}
+
+```
+
+Fire up your app, let’s test our changes.
+
+Hopefully you see the same thing as myself, the button displayed at the page header.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_modify_ui_04.png "Login with GitHub button")
+
+If you click your new button you are authenticated via GitHub and the button is no longer displayed at the site header.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_modify_ui_05.png "Logged with GitHub")
+
+If you click _Log off_ the button is again displayed.
+
+___
+
