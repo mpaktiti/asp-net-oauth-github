@@ -9,6 +9,11 @@ The software I used for this tutorial includes:
 - Owin.Security.Providers 1.26.0
 - Google Chrome Version 48.0.2564.97 m
 
+TOC
+- [Create your ASP .NET MVC application](#create-your-asp-net-mvc-application)
+- [Register your application in GitHub](#register-your-application-in-github)
+
+
 ___
 
 ### Create your ASP .NET MVC application
