@@ -65,3 +65,56 @@ Once the application registration is complete your will be redirected to the app
 
 ![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/github_register_app_05.png "Copy Client ID and Client Secret")
 
+___
+
+### Enable GitHub authentication
+
+Go back to Visual Studio. 
+
+We will be using ASP .NET Identity for the authentication. There is a GitHub authentication provider we can use and it is included in the Owin.Security.Providers Nuget package.
+
+To install this package via Nuget, select _Tools > NuGet Package Manager > Package Manager Console_
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_enable_github_auth.png "Tools > NuGet Package Manager > Package Manager Console")
+
+The console should be displayed at the bottom of Visual Studio. Type
+```
+Install-Package Owin.Security.Providers
+```
+
+and press Enter. You should get a message that the package is successfully installed.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_enable_github_auth_02.png "Install-Package Owin.Security.Providers")
+
+Using the Solution Explorer, expand the `App_Start` folder and open the `Startup.Auth.cs` file. It’s time to write some code!
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/vs_enable_github_auth_03.png "Open file Startup.Auth.cs")
+
+First we need to add the namespace of the provider from the Nuget package we just installed.
+
+At the top of the file insert the following code:
+
+```cs
+using Owin.Security.Providers.GitHub;
+```
+
+Next we need to enable the GitHub provider, using the _Client ID_ and _Client Secret_ information that GitHub gave us earlier.
+Inside the `ConfigureAuth` method, of the `Startup` class, type the following code:
+
+```cs
+// Enable logging in with GitHub
+app.UseGitHubAuthentication(
+clientId: "4ac29bea3cbc9f317ada",
+clientSecret: "0c93df4a12f33c9b9450e46af1cf0612ce1878f4");
+```
+
+Set the `clientId` value to the _Client ID_ you copied earlier from GitHub.
+
+Likewise, set the `clientSecret` value to the _Client Secret_ value.
+
+Make sure that the values you set are exactly the same, otherwise the authentication will not work.
+
+> ![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/paper-icon.jpg "Note") 
+> _If later on you want to reset the Client Secret value at your GitHub application (because for example you published it on the web for a tutorial you were building, and it is no longer a secret), make sure that you update your ASP .NET web app as well, otherwise your authentication functionality will break._
+
+___
