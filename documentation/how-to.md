@@ -349,3 +349,187 @@ ___
 
 ### Push to GitHub
 
+>**TL;DR**
+This paragraph goes a bit into length to explain what the commands do. If you are familiar with git feel free to skip this paragraph. Simply generate a .gitignore file, initialize a repository, add, commit and push changes to GitHub.
+
+Now let’s create a git repository for our app and push our code to GitHub.
+
+If you do not have Git installed you can find instructions on how to configure it on your machine [here](http://githowto.com/).
+
+Let's start by initializing a new repository. Open a Git Bush and navigate to the directory containing your solution.
+
+```sh
+mariap GithubOAuth $ pwd
+/c/Users/mariap/Dropbox/coding/asp.net/GithubOAuth
+```
+
+Initialize a Git repository:
+
+```sh
+mariap GithubOAuth $ git init
+Initialized empty Git repository in C:/Users/mariap/Dropbox/coding/asp.net/GithubOAuth/.git/
+
+```
+
+The next step is to generate a gitignore file. This file should be populated with all the files that should not be committed to git, it will simply ignore them. You can find the contents of this file [online](https://github.com/github/gitignore/blob/master/VisualStudio.gitignore) or generate it using Visual Studio. 
+
+Let’s see how the latter is done. Go back to Visual Studio and select _View > Team Explorer_
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/github_push.png "View > Team Explorer")
+
+On the _Team Explorer_ window, click on _Settings_.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/github_push_02.png "View > Team Explorer > Settings")
+
+Click on _Repository Settings_.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/github_push_03.png "View > Team Explorer > Settings > Repository Settings")
+
+Locate the _Ignore & Attributes Files_ section. At the Ignore File it should say that no file was found.
+Click on _Add_ to create one.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/github_push_04.png "Add .gitignore file")
+
+A `.gitignore` file is created and populated for you.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/github_push_05.png ".gitignore file in VS")
+
+<br><br>
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/github_push_06.png ".gitignore file in windows explorer")
+
+Now we are ready to add the files we want to commit to your repository.
+
+Head back to your Git Bus and execute the following commands:
+
+```sh
+mariap (master #) GithubOAuth $ git status
+On branch master
+
+Initial commit
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        .gitignore
+        GithubOAuth.sln
+        GithubOAuth/
+nothing added to commit but untracked files present (use "git add" to track)
+```
+
+The `git status` command checks the current state of the repository and displays the results. In this case it informs us that we are on branch master and lists the untracked files (new files that have never been committed). 
+
+Notice here that git does not list all the files in this directory, for example the `packages/` directory is omitted. The reason for that is the `.gitignore` file we created earlier. For the packages example we can see the following lines in `.gitignore`:
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/gitignore_contents.png ".gitignore file contents")
+
+
+```sh
+mariap (master #) GithubOAuth $ git add .
+warning: LF will be replaced by CRLF in GithubOAuth/Content/bootstrap.css.
+The file will have its original line endings in your working directory.
+...
+warning: LF will be replaced by CRLF in GithubOAuth/fonts/glyphicons-halflings-regular.svg.
+The file will have its original line endings in your working directory.
+
+```
+
+The `git add .` command stages all new files under this directory. The next commit will include the changes staged.
+
+> ![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/paper-icon.jpg "Note") Don't be troubled by all these _LF will be replaced by CRLF_ warnings that you might see. This is just git turning all CRLF line endings to just LF before it stores it in the commit. This is done for consistency reasons (scenarios where several developers on various OS and editors modify the same files). You can find more information [here](https://help.github.com/articles/dealing-with-line-endings/).
+
+```sh
+mariap (master #) GithubOAuth $ git status
+On branch master
+
+Initial commit
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+        new file:   .gitignore
+        new file:   GithubOAuth.sln
+        new file:   GithubOAuth/App_Start/BundleConfig.cs
+        ...
+        new file:   GithubOAuth/packages.config
+```
+
+The `git status` command is again about checking the repository status. It was ran simply to demonstrate all the files that have been staged and will be committed shortly.
+
+Speaking of that, you are now ready to commit the staged changes to your repository. Run the following command:
+
+```sh
+mariap (master #) GithubOAuth $ git commit -m "Initial commit"
+
+[master (root-commit) bb06108] Initial commit
+warning: LF will be replaced by CRLF in GithubOAuth/Content/bootstrap.css.
+The file will have its original line endings in your working directory.
+...
+warning: LF will be replaced by CRLF in GithubOAuth/fonts/glyphicons-halflings-regular.svg.
+The file will have its original line endings in your working directory.
+ 78 files changed, 32356 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 GithubOAuth.sln
+ create mode 100644 GithubOAuth/App_Start/BundleConfig.cs
+ ...
+ create mode 100644 GithubOAuth/fonts/glyphicons-halflings-regular.woff
+ create mode 100644 GithubOAuth/packages.config
+```
+
+Run once more git status and see what changed after the commit:
+
+```sh
+mariap (master) GithubOAuth $ git status
+On branch master
+nothing to commit, working directory clean
+```
+
+You are now ready to push your changes to GitHub. Since this is a new repository we first need to create the remote repository and add this new remote.
+
+Head back to GitHub and create a new repository.
+
+Click on the _New repository_ button and enter a name.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/github_push_07.png "New GitHub repository")
+
+<br><br>
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/github_push_08.png "Set GitHub repository info")
+
+Do not initialize with a README. Click on _Create repository_.
+
+On the next screen select the _HTTPS_ option. Copy the link and head back to your Git Bush.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/github_push_09.png "Switch to HTTPS")
+
+Let’s add now the remote we just created using the `git remote add` command.
+
+```sh
+mariap (master) GithubOAuth $ git remote add origin https://github.com/mpaktiti/asp-net-oauth-github.git
+mariap (master) GithubOAuth $ git remote -v
+origin  https://github.com/mpaktiti/asp-net-oauth-github.git (fetch)
+origin  https://github.com/mpaktiti/asp-net-oauth-github.git (push)
+```
+
+The `git remote –v` lists the remote repositories. 
+
+Proceed with a `git push` to commit the changes:
+
+```sh
+mariap (master) GithubOAuth $ git push origin master
+Username for 'https://github.com': maria.paktiti@gmail.com
+Password for 'https://maria.paktiti@gmail.com@github.com':
+Counting objects: 94, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (93/93), done.
+Writing objects: 100% (94/94), 425.29 KiB | 0 bytes/s, done.
+Total 94 (delta 15), reused 0 (delta 0)
+To https://github.com/mpaktiti/asp-net-oauth-github.git
+ * [new branch]      master -> master
+```
+
+Let’s go back to GitHub and see what changed to the repository we created earlier.
+
+![alt-text](https://github.com/mpaktiti/asp-net-oauth-github/raw/master/documentation/images/github_push_10.png "View repository at GitHub")
+
+We can see that all the files from our local directory, except for those listed in the .gitignore file, have been uploaded to GitHub.
+
+That's it! You can now easily share your project with anyone you want.
+
+___
