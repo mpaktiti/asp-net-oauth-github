@@ -8,7 +8,7 @@ To be more specific, this article explains the following:
 - [How to enable GitHub authentication in your ASP .NET app](#enable-github-authentication)
 - [How to test your app](#ready-steady-go)
 - [How to make your app a bit more pleasant for your users](#what-about-ux)
-- [How to create a new git repository for your project ad push to GitHub](#push-to-github)
+- [How to create a new git repository for your project and push to GitHub](#push-to-github)
 - [A list with the software I used for the project in cases something is off](#software-used)
 
 Let's get started!
